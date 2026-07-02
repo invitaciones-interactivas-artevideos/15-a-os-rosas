@@ -13,7 +13,7 @@
   --color-fondo: #080607;
   --color-nombre: #9b223a;
   --color-mis15: #e8b7c6;
-  --color-texto-suelto: #ffffff;
+  --color-texto-suelto: #6B2803;
   --color-titulo: #e8b7c6;
   --title-font-2: 'Cinzel', serif;
   --color-icono: #e8b7c6;
@@ -48,35 +48,61 @@
   padding: 0;
   box-sizing: border-box;
 }
+  html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  /* height: 100%; 👈 ELIMINA O COMENTA ESTA LÍNEA */
+}
 
 html {
   scroll-behavior: smooth;
 }
 
-body {
-  font-family: var(--body-font);
-  background: var(--color-fondo);
-  color: var(--color-texto-suelto);
-  overflow-x: hidden;
-  padding-bottom: 56px;
+body{
+    font-family: var(--body-font);
+    background: var(--color-fondo);
+    min-height: 100dvh;
+    color: var(--color-texto-suelto);
+    overflow-x: hidden;
+    padding-bottom:56px;
+
+    position: relative;
 }
 
 .background {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh; /* 👈 Solo mantén el vh tradicional */
   z-index: -2;
   overflow: hidden;
   background: var(--color-fondo);
 }
 
-.background video {
+.bg-video-main {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh; /* Mantuvimos solo la medida clásica */
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+  z-index: 0;
+  transform: translateZ(0);
+}
+
+.background video,
+.bg-video-main {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: translate(-50%, -50%);
+  object-position: center;
+  transform: none !important;
 }
 
 .bg-video-fill {
@@ -88,12 +114,15 @@ body {
 }
 
 .bg-video-main {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh; /* 👈 CLAVE */
   object-fit: cover;
-  object-position: center center;
-  filter: brightness(1.0) contrast(1.08) saturate(1.08);
-  transform: scale(1.0);
+  object-position: center;
+  transform: translateZ(0); /* 👈 evita jitter en iOS */
 }
 
 .overlay {
@@ -101,13 +130,15 @@ body {
 }
 
 .hero {
-  min-height: 100svh;
+   min-height: 100vh;
+  min-height: 100dvh;;
   display: flex;
   align-items: flex-start; /* 👈 clave */
   justify-content: center;
   text-align: center;
   padding: 120px 18px 70px; /* 👈 acá lo bajás */
   position: relative;
+  z-index: 2;
 }
 
 .hero-content {
@@ -136,8 +167,8 @@ body {
 }
 
 .mis15 {
-  font-family: 'Playfair Display', serif;  /* nos casamos fuente */
-  font-size: clamp(3.2rem, 5vw, 4rem);
+  font-family: Cinzel, serif;  /* nos casamos fuente */
+  font-size: clamp(2.0rem, 5vw, 2.8rem);
   color: var(--color-mis15);
   line-height: 0.8;
   font-weight: 400;
@@ -256,15 +287,15 @@ margin-left: -28.125vh;
   text-align: center;
   line-height: var(--interlineado-box);
 }
-}
 
 .box h2 {
+  font-family: Cinzel, serif; /* 👈 ¡Aquí agregas la fuente! */
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
   font-size: clamp(1.4rem, 4vw, 1.75rem); /*tamaño de lso títulos*/
-  font-weight: 700;
+  font-weight: 500; /*negrita de os titulos*/
   color: var(--color-titulo);
   letter-spacing: 0.6px;
   margin-bottom: 18px;
@@ -311,22 +342,22 @@ margin-left: -28.125vh;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 82px;
-  padding: 12px 8px;
+  min-height: auto;
+  padding: 15px 10px;
   border-radius: 14px;
   background: var(--color-mini-box);
   border: 1px solid var(--color-mini-box-borde);
 }
 
 .time span {
-  font-size: clamp(1.45rem, 5vw, 2rem);
+  font-size: clamp(1.6rem, 5vw, 3rem);
   color: var(--color-contador-numero);
   font-weight: 700;
   display: block;
 }
 
 .time small {
-  font-size: 0.83rem;
+  font-size: 1.2rem;
   color: var(--color-contador-texto);
   margin-top: 5px;
 }
@@ -529,7 +560,7 @@ margin-left: -28.125vh;
 }
 
 .final-butterfly img{
-  width:200px;
+  width:250px;
   height:auto;
   opacity:0.85;
 }
@@ -572,15 +603,22 @@ margin-left: -28.125vh;
   }
 
   .bg-video-main {
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center center;
-    transform: none;
-    box-shadow: none;
-    filter: brightness(0.80) contrast(1.08) saturate(1.08);
-  }
+  will-change: transform;
+  transform: translateZ(0);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  object-fit: cover;
+  object-position: center;
+
+  box-shadow: none;
+  filter: brightness(0.80) contrast(1.08) saturate(1.08);
+}
 
   .overlay {
     background:
@@ -597,6 +635,9 @@ margin-left: -28.125vh;
   .btn,
   a.button {
     width: auto;
+    position: relative;
+  z-index: 5;
+  pointer-events: auto;
   }
 
   .countdown {
@@ -644,7 +685,6 @@ margin-left: -28.125vh;
 <body>
 
 <div class="background">
- 
   <video class="bg-video-main" autoplay muted loop playsinline preload="auto">
     <source src="fondo.mp4" type="video/mp4">
   </video>
@@ -655,13 +695,13 @@ margin-left: -28.125vh;
 <main>
   <section class="hero">
     <div class="hero-content">
-     <div class="mis15">Mis 15 años 
+     <div class="mis15">Mis 15 años
   </div>
      <h1 id="name" class="nombrecumpleanera"></h1>
 
       <div class="frase-hero">
-        La noche m´s soñada<br> está por comenzar
-        
+        Un capítulo especial<br> está por comenzar<br>
+        y nos encantaría<br> que lo vivas con nosotros...
       </div>
 
       <div class="acciones">
@@ -759,7 +799,7 @@ Ver ubicación
     </div>
 
     <div class="box">
-      <h2 class="icon-heading" aria-label="Confirmación de asistencia"><i class="fa-regular fa-heart animated-icon"></i>ASISTENCIA</h2>
+      <h2 aria-label="Confirmación de asistencia"><i class="fa-regular fa-heart animated-icon"></i>ASISTENCIA</h2>
       <p class="box-texto">
         Tu presencia<br> 
         es muy importante para nosotros.<br>
@@ -865,28 +905,28 @@ Ver ubicación
 */
 
 const CONFIG = {
-  paleta: "rosa",
+  paleta: "blush",
   fuentes: "Petit Formal Script",
 
   colores: {
     fondo: "",
-    nombre: "#e3b486",
-    mis15: "",
-    textosSueltos: "",
-    titulos: "67006B",
-    iconos: "67006B",
-    textoBoxes: "#40003A",
+    nombre: "#B0641A",
+    mis15: "#522B05",
+    textosSueltos: "#032900",
+    titulos: "#0E4C02",
+    iconos: "#5E2C13",
+    textoBoxes: "editorial",
     textoBoxesSuave: "",
     boxes: "",
     bordeBoxes: "",
-    botonFondo1: "",
-    botonFondo2: "",
+    botonFondo1: "#89B33E",
+    botonFondo2: "#EAFAC5",
     botonTexto: "",
     botonBorde: "",
-    contadorNumeros: "",
-    contadorTexto: "",
-    miniBoxes: "",
-    bordeMiniBoxes: "",
+    contadorNumeros: "#613803", /*cambia color numeros de la */
+    contadorTexto: "#613803", /*cambia color de las palabras del contador*/
+    miniBoxes: "#EBFAC3", /*cambia color de adentro de lso cuadros de la cuenta*/
+    bordeMiniBoxes: "#944313", /*cambia color de los bordes de los cuadros*/
     panelRegalo: "",
     bordePanelRegalo: "",
     overlayArriba: "",
@@ -927,7 +967,7 @@ partyVenue: "Salón Aurora Palace",
 partyAddress: "Av. Las Flores 2020",
 
 partyMap: "https://maps....",
-  dressCode: "Semi-formal<br>Reservamos el color blanco<br>para la quinceañera",
+  dressCode: "Semi-formal<br>Reservamos el color blanco<br>para la novia",
   formularioAsistencia: "https://docs.google.com/forms/d/e/1FAIpQLScZhjYcfePL1Ylu4gyruySPntMRvHBywHx09yzgDPboeVvNSQ/viewform?usp=sharing&ouid=108226770807790576500",
   albumFotosLink: "https://docs.google.com/forms/d/e/1FAIpQLScmQNGoapK8xgvTQfr6dpjUac8bcL_V44ABJwGHziPkILef2A/viewform?usp=sharing&ouid=108226770807790576500",
   mensajePlaylistWhatsApp: "Hola, quiero sugerir una canción para la fiesta: ",
@@ -957,7 +997,7 @@ const PALETAS = {
     fondo: "#080607",
     nombre: "#9b223a",
     mis15: "#e8b7c6",
-    textosSueltos: "#33001F",
+    textosSueltos: "#ffffff",
     titulos: "",
     iconos: "#e8b7c6",
     textoBoxes: "",
@@ -994,12 +1034,12 @@ const PALETAS = {
     botonFondo1: "#f4a7bb",
     botonFondo2: "#ffe1e9",
     botonTexto: "#281018",
-    botonBorde: "rgba(255, 255, 255, 0.32)",
-    contadorNumeros: "#ffe1e9",
-    contadorTexto: "rgba(255, 247, 249, 0.78)",
-    miniBoxes: "rgba(0, 0, 0, 0.27)",
-    bordeMiniBoxes: "rgba(255, 255, 255, 0.13)",
-    panelRegalo: "rgba(0, 0, 0, 0.30)",
+    botonBorde: "",
+    contadorNumeros: "#ADFF9C", // cambia color numeros de la cuenta
+    contadorTexto: "#ADFF9C",   // cambia color de las palabras del contador
+    miniBoxes: "#B39B8D",       // cambia color de adentro de lso cuadros (¡le agregué el #!)
+    bordeMiniBoxes: "#944313",  // cambia color de los bordes de los cuadros
+    panelRegalo: "",
     bordePanelRegalo: "rgba(255, 255, 255, 0.17)",
     overlayArriba: "rgba(0, 0, 0, 0.34)",
     overlayAbajo: "rgba(0, 0, 0, 0.60)",
@@ -1022,10 +1062,10 @@ const PALETAS = {
     botonFondo2: "#efe7ff",
     botonTexto: "#171023",
     botonBorde: "rgba(255, 255, 255, 0.30)",
-    contadorNumeros: "#5E0334",
-    contadorTexto: "#5E0334",
-    miniBoxes: "#8C7280",
-    bordeMiniBoxes: "#5E0334",
+    contadorNumeros: "#efe7ff",
+    contadorTexto: "rgba(255, 255, 255, 0.78)",
+    miniBoxes: "rgba(0, 0, 0, 0.26)",
+    bordeMiniBoxes: "rgba(255, 255, 255, 0.12)",
     panelRegalo: "rgba(0, 0, 0, 0.28)",
     bordePanelRegalo: "rgba(255, 255, 255, 0.16)",
     overlayArriba: "rgba(0, 0, 0, 0.34)",
@@ -1175,7 +1215,7 @@ const PALETAS = {
     mis15: "#b8dfca",
     textosSueltos: "#ffffff",
     titulos: "#b8dfca",
-    iconos: "#e8fff1",
+    iconos: "#5E2C13",
     textoBoxes: "#ffffff",
     textoBoxesSuave: "rgba(255, 255, 255, 0.78)",
     boxes: "rgba(226, 255, 239, 0.16)",
@@ -1199,11 +1239,11 @@ const PALETAS = {
   esmeralda: {
     fondo: "#03110d",
     nombre: "#f3fff9",
-    mis15: "#70d6a5",
+    mis15: "072B00",
     textosSueltos: "#f3fff9",
-    titulos: "#70d6a5",
+    titulos: "361D05",
     iconos: "#bfffe0",
-    textoBoxes: "#f3fff9",
+    textoBoxes: "072B00",
     textoBoxesSuave: "rgba(243, 255, 249, 0.76)",
     boxes: "rgba(144, 236, 184, 0.16)",
     bordeBoxes: "rgba(220, 255, 235, 0.23)",
@@ -1227,7 +1267,7 @@ const PALETAS = {
     fondo: "#120407",
     nombre: "#fff8f4",
     mis15: "#d9a06f",
-    textosSueltos: "#fff8f4",
+    textosSueltos: "#081C12",
     titulos: "#e3b486",
     iconos: "#ffd6b0",
     textoBoxes: "#fff8f4",
